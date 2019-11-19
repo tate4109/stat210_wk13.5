@@ -1,0 +1,101 @@
+---
+title: "Lists"
+---
+
+```{r setup}
+library(tidyverse)
+install.packages("repurrrsive")
+library(repurrrsive)
+library(broom)
+names(sw_people) <- sw_people %>% map_chr("name")
+
+# Toy data
+set.seed(1000)
+exams <- list(
+  student1 = round(runif(10, 50, 100)),
+  student2 = round(runif(10, 50, 100)),
+  student3 = round(runif(10, 50, 100)),
+  student4 = round(runif(10, 50, 100)),
+  student5 = round(runif(10, 50, 100))
+)
+
+extra_credit <- list(0, 0, 10, 10, 15)
+
+names(who) <- str_replace(names(who), "newrel", "new_rel")
+tb <-  
+  who %>%
+  gather("codes", "n", 5:60) %>%
+  separate(codes, c("new", "type", "sexage"), sep = "_") %>%
+  select(-new, -iso2, -iso3) %>%
+  separate(sexage, c("sex", "age"), sep = 1) %>%
+  drop_na(n)
+```
+
+# Lists
+
+## Your Turn 1
+
+Run the code below, which displays a list. What do you see?
+
+```{r}
+sw_people %>% head(3)
+sw_people$`Luke Skywalker`
+sw_people[[2]]
+```
+
+## Quiz
+
+```{r}
+vec <- c(-2, -1, 0)
+lst <- list(-2, -1, 0)
+
+abs(vec)
+abs(lst) # error bc not a list
+```
+
+## Your Turn 2
+
+Who was taller Anakin Skywalker or Darth Vader? 
+Use the RStudio Viewer to find the answer (in cm).
+
+*Hint: View() sw_people*
+
+```{r}
+sw_people$`Luke Skywalker` # [1] "172"
+sw_people$`Anakin Skywalker` # [1] "188"
+sw_people$`Darth Vader` # [1] "202"
+# Darth Vader
+```
+
+## Your Turn 3
+
+Here are two subsetting commands. Do they return the same values? Run the code chunks below to confirm.
+
+```{r}
+a_list <- list(num = c(8, 9), 
+               log = TRUE,    
+               cha = c("a", "b", "c"))
+# think of a train
+```
+
+```{r}
+a_list["num"]
+```
+
+```{r}
+a_list[["num"]]
+```
+```{r}
+sw_people[["Anakin Skywalker"]][["height"]] # prints height alone as [1] "188"
+```
+
+
+Take Aways
+
+* Use `View()` to inspect lists
+* Use `[[ ]]`, or `$` to extract values from lists
+* Lists can be a column in a data frame
+* Tables are an organizational structure that you can manipulate.
+* Use fx to repeat processes that are done <3x
+* Construct fx that have good names, that are simple & flexible
+* Lists can contain multiple types of values

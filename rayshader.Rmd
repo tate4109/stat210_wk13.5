@@ -1,0 +1,88 @@
+---
+title: "Rayshader Example"
+author: "Joseph Randolph"
+date: "11/19/2019"
+output: html_document
+---
+
+Install and call packages
+```{r}
+install.packages('rayshader') # really cool pacjage that shows model images with layers of sading for elevations! 
+library(rayshader)
+#install.Rtools(TRUE)
+#install.packages('devtools')
+#devtools::install_github('tylermorganwall/rayshader')
+```
+
+We have to prepare 'tempfile' and 'tempmap' for arguments in the code below
+```{r}
+#Prepare 'tempfile' and 'tempmap' for arguments in the code below
+tempfilename <-  tempfile()
+png(tempfilename,width = 401,height=401)
+tempmap = png::readPNG(tempfilename)
+```
+
+We use monteraybay elevation data to produce a basic topographical representation using a light source specifeid by the raysade() function with an overlay
+```{r}
+# 'montereybay' is a data set with in rayshader containng elevation data
+montereybay <- montereybay
+montereybay %>%
+  ray_shade(zscale=50,maxsearch = 500,anglebreaks = seq(20,30,0.1)) %>%
+  add_overlay(tempmap,alphalayer = 0.5) %>%# alphalayer is a 3-layer array, this argument tells which color is interpretted as completely transparent.
+  plot_map()
+```
+
+We will add more funtions/layer to the map. This will create a shadow which will add moe contrast
+```{r}
+montereybay %>%
+sphere_shade() %>% #sphere_shade also includes 7 built-in palettes: “imhof1”, “imhof2”, “imhof3”, imhof4“,”desert“,”bw“,”unicorn
+add_overlay(tempmap,alphalayer = 0.4) %>% #this argument tells which color is interpretted as completely transparent
+add_shadow(ray_shade(montereybay,zscale=50,maxsearch = 500)) %>%#adds shadow to a textured color array
+plot_map()
+
+```
+
+
+```{r}
+#produces  Ambient Occlusion Shadow Map (map with no light)
+amb = ambient_shade(heightmap = montereybay)
+plot_map(amb)
+```
+
+
+```{r}
+#Create map of elevation indicated by color
+montereybay %>%
+  height_shade() %>%
+  plot_map()
+
+```
+
+```{r}
+#Add a shadow to previous map
+montereybay %>%
+  height_shade() %>%
+  add_shadow(ray_shade(montereybay,zscale=50),0.3) %>%
+  plot_map()
+```
+
+```{r}
+#Change the palette
+montereybay %>%
+  height_shade(texture = topo.colors(256)) %>%
+  add_shadow(ray_shade(montereybay,zscale=50),0.3) %>%
+  plot_map()
+
+```
+ 
+ Here we will create a 3d color model and we will use render_snapshot() to pruce the image
+```{r}
+#creat a 3d model
+montereybay %>%
+  sphere_shade() %>%
+  plot_3d(montereybay,zscale = 50, water = TRUE, waterlinecolor="white")
+render_snapshot()
+
+```
+
+

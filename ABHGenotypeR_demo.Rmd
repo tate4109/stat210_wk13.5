@@ -1,0 +1,46 @@
+---
+title: "ABHGenotyper Demo"
+output: html_notebook
+---
+
+```{r, setup}
+install.packages('ABHgenotypeR')
+library(ABHgenotypeR)
+```
+
+
+#####Loading in and analyzing data. Viewing initial plot.
+```{r} 
+#Loads practice dataset from ABHgenotypes package and labels genotypes
+genotypes <- readABHgenotypes(system.file("extdata","preprefall025TestData.csv",package = "ABHgenotypeR"),
+nameA = "NB", nameB = "OL")
+
+#View column names
+_____(genotypes)
+
+#Plotting genotypes 
+plotGenos(genotypes)
+```
+
+
+#####Filling in data points and correcting errors within the data
+```{r}
+#Imputing data: If there is a blank in the data and the genotypes to the right and left of the blank are identical, the blank is filled in using this function. 
+postImpGenotypes <- imputeByFlanks(genotypes)
+
+
+ErrCorr1Genotypes <- correctUndercalledHets(postImpGenotypes, maxHapLength = 3)
+
+#View plot of corrected data
+_____(ErrorCorr1Genotypes)
+
+ErrCorr2Genotypes <- correctStretches(ErrCorr1Genotypes, maxHapLength = 3)
+
+```
+
+
+#####Comparing genotype matrices and editing graphs
+```{r}
+plotCompareGenos(genotypes, ErrCorr2Genotypes, chromToPlot = 1:3)
+```
+

@@ -1,0 +1,87 @@
+---
+title: "R Stats Package Exercise"
+author: "Jerri Schorr"
+date: "11-19-2019"
+output: html_notebook
+---
+
+### Set Up 
+
+We will start by downloading the package and putting our library in the set-up chunk below. Make sure you delete the hashtag before `install.packages` to install Stats Package.
+
+Stats is a base package, meaning it should already be installed, if it is not or if it needs updated, R will do so when you run `install.packages`.
+
+```{r setup, include=FALSE}
+#install.packages("stats")
+library(stats)
+head(cars,5) #view first 5 rows of cars data set
+```
+
+* We will be using the "cars" data set in R for the following exercises
+
+### Exercise 1
+
+Let's find the median of data.
+
+* The median is used instead of the mean when the data has a very large spread of data
+
+```{r}
+median(cars$speed)
+median(cars$speed)
+#you can choose any column, variable, or data set you would like to put in the function
+```
+
+### Exercise 2
+
+Now let's find the standard deviation of data.
+
+* Standard Deviation is a measure of spread.
+
+```{r}
+sd(cars$dist)
+sdcars$speed)
+#you can choose any column, variable, or data set you would like to put in the function
+```
+
+
+### Exercise 3
+
+Now let's find the Inter Quartile Range (IQR) of data.
+
+* The IQR tells you the distance between the 3rd quartile and the 1st quartile
+
+```{r}
+IQR(cars$speed)
+IQR(cars$dist)
+#you can choose any column, variable, or data set you would like to put in the function
+```
+
+
+### Exercise 4
+
+Next we will fit the data with a Linear Model to see its relationship
+
+* Linear Models show whether data is correlated in a positive direction, negative direction, or if there is no correlation.
+
+```{r}
+dist <- cars$dist
+speed <- cars$speed
+plot(dist, speed)
+fit1 <- lm(speed ~ dist, data = cars)
+abline(fit1, col = "red")
+# be sure to highlight all code above and run all at once to plot the data and see the fir of the linear model
+#you always want to put your response, or y, variable first in the lm function.
+summary(fit1)# this will give you all of the details for the linear model 
+
+
+plot(speed, dist)
+fit2 <- lm(speed~ dist, data = cars)
+abline(fit2, col = "red")
+
+summary(fit2)
+```
+
+
+
+
+
